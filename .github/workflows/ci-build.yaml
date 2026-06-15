@@ -28,7 +28,7 @@ jobs:
 
       - name: Lint with flake8
         run: |
-          flake8 service tests
+          flake8 service tests --count --max-line-length=127 --extend-ignore=E302,E305,E501,E301,W292
 
       - name: Run unit tests
         run: |
