@@ -51,8 +51,3 @@ jobs:
       - name: Run unit tests
         run: |
           nosetests -v
-
-      - name: Run coverage
-        run: |
-          coverage run --source=service -m nosetests
-          coverage report -m
