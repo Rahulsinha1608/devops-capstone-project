@@ -6,8 +6,13 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY service/ service/
 
-EXPOSE 5000
+RUN useradd -ms /bin/bash theia && \
+    chown -R theia:theia /app
 
-CMD ["honcho", "start"]
+USER theia
+
+EXPOSE 8080
+
+CMD ["gunicorn", "--bind=0.0.0.0:8080", "--log-level=info", "service:app"]
