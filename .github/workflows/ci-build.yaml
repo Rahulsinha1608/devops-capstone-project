@@ -12,6 +12,24 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URI: postgresql://postgres:postgres@localhost:5432/postgres
+
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
@@ -32,4 +50,9 @@ jobs:
 
       - name: Run unit tests
         run: |
-          nosetests
+          nosetests -v
+
+      - name: Run coverage
+        run: |
+          coverage run --source=service -m nosetests
+          coverage report -m
